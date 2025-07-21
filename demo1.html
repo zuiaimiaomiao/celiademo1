@@ -1,0 +1,138 @@
+<html lang="zh-CN">
+    <head>
+        <title>个人资料展示</title>
+        <link rel="stylesheet" href="a.css">
+        <style>
+            /* 页面整体样式 */
+            body {
+                font-family: Arial, sans-serif;
+                /* background-color: #f4f4f9; */
+                background-image: url('hsbc.jpg'); /* 替换为你的背景图路径 */
+                background-size: cover;
+                background-position: center;
+                margin: 0;
+                padding: 0;
+                display: flex;  /* 使用 Flexbox 弹性布局 */
+                justify-content: center;  /* 水平居中 */
+                align-items: center;  /* 垂直居中 */
+                height: 100vh;
+            }
+        
+            /* 容器样式 */
+            .container {
+                text-align: center;
+            }
+        
+            /* 表单容器样式 */
+            .form-container {
+                background-color:  rgba(255, 255, 255, 0.8);
+                padding: 15px 20px; /* Reduced padding */
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                width: 300px; /* Reduced width */
+                margin: 0 auto;
+            }
+        
+            /* 标题样式 */
+            h1 {
+                text-align: center;
+                color: #333333;
+                margin-bottom: 15px; /* Reduced margin */
+                font-size: 20px; /* Reduced font size */
+            }
+        
+            /* 标签样式 */
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: #555555;
+                font-size: 14px; /* Reduced font size */
+            }
+        
+            /* 输入框样式 */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                width: 100%;
+                padding: 8px; /* Reduced padding */
+                margin-bottom: 10px; /* Reduced margin */
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+                font-size: 12px; /* Reduced font size */
+            }
+        
+            /* 按钮样式 */
+            input[type="submit"] {
+                width: 100%;
+                padding: 8px; /* Reduced padding */
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 14px; /* Reduced font size */
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+        
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+        </style>
+        <script>
+            function validateform() {
+                var username = document.forms["regForm"]["username"].value;
+                var email = document.forms["regForm"]["email"].value;
+                var password = document.forms["regForm"]["password"].value;
+                var confirm_password = document.forms["regForm"]["confirm_password"].value;
+                if (username == "" || email == "" || password == "") {
+                    alert("All fields must be filled out");
+                    return false;
+                }
+            }
+
+            function validateLength() {
+                var password = document.getElementById("password").value;
+                if (password.length < 8) {
+                    alert("Password must be at least 8 characters long");
+                }
+            }
+
+            function validatePass() {
+                var password = document.getElementById("password").value;
+                var confirm_password = document.getElementById("confirm_password").value;
+                if (password != confirm_password) {
+                    alert("Passwords do not match");
+                }
+            }
+
+            function readName() {
+                usr = document.regForm.username.value;
+                alert("Welcome " + usr + "!");
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>User Registration</h1>
+            <div class="form-container">
+                <form action="register.html" method="get" name="regForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required><br><br>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required><br><br>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required onblur="validateLength()"><br><br>
+
+                    <label for="password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required onblur="validatePass()"><br><br>
+
+                    <input type="submit" value="Register">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

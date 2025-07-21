@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息表单</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>用户信息表单</h1>
+        <form id="userForm">
+            <!-- 名称 -->
+            <div class="form-group">
+                <label for="name">名称 (必填):</label>
+                <input type="text" id="name" name="name">
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <!-- 年龄 -->
+            <div class="form-group">
+                <label for="age">年龄 (必填，10到100之间):</label>
+                <input type="number" id="age" name="age">
+                <div class="error" id="ageError"></div>
+            </div>
+
+            <!-- 性别 -->
+            <div class="form-group">
+                <label>性别 (必选):</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="男"> 男</label>
+                    <label><input type="radio" name="gender" value="女"> 女</label>
+                </div>
+                <div class="error" id="genderError"></div>
+            </div>
+
+            <!-- 地址 -->
+            <div class="form-group">
+                <label for="address">地址:</label>
+                <textarea id="address" name="address" rows="3"></textarea>
+            </div>
+
+            <!-- 城市 -->
+            <div class="form-group">
+                <label for="city">城市:</label>
+                <select id="city" name="city">
+                    <option value="">请选择城市</option>
+                    <option value="北京">北京</option>
+                    <option value="上海">上海</option>
+                    <option value="广州">广州</option>
+                    <option value="深圳">深圳</option>
+                </select>
+            </div>
+
+            <!-- 邮政编码 -->
+            <div class="form-group">
+                <label for="postalCode">邮政编码 (6位数字):</label>
+                <input type="text" id="postalCode" name="postalCode">
+                <div class="error" id="postalCodeError"></div>
+            </div>
+
+            <!-- 爱好 -->
+            <div class="form-group">
+                <label>爱好:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="hobbies" value="看电影"> 看电影</label>
+                    <label><input type="checkbox" name="hobbies" value="唱歌"> 唱歌</label>
+                    <label><input type="checkbox" name="hobbies" value="听音乐"> 听音乐</label>
+                    <label><input type="checkbox" name="hobbies" value="阅读"> 阅读</label>
+                    <label><input type="checkbox" name="hobbies" value="户外运动"> 户外运动</label>
+                    <label><input type="checkbox" name="hobbies" value="室内运动"> 室内运动</label>
+                </div>
+            </div>
+
+            <button type="button" onclick="validateForm()">提交</button>
+        </form>
+
+        <div class="output" id="output"></div>
+    </div>
+</body>
+<script>
+    function validateForm() {
+        // 清除之前的错误信息
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+        document.getElementById('output').innerHTML = '';
+
+        let isValid = true;
+
+        // 获取表单值
+        const name = document.getElementById('name').value.trim();
+        const age = document.getElementById('age').value.trim();
+        const gender = document.querySelector('input[name="gender"]:checked');
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value;
+        const postalCode = document.getElementById('postalCode').value.trim();
+        const hobbies = Array.from(document.querySelectorAll('input[name="hobbies"]:checked')).map(el => el.value);
+
+        // 验证名称
+        if (!name) {
+                document.getElementById('nameError').textContent = '名称是必填项';
+                isValid = false;
+            }
+
+            // 验证年龄
+            if (!age || age < 10 || age > 100) {
+                document.getElementById('ageError').textContent = '年龄必须是10到100之间的数字';
+                isValid = false;
+            }
+
+            // 验证性别
+            if (!gender) {
+                document.getElementById('genderError').textContent = '请选择性别';
+                isValid = false;
+            }
+            // 验证邮政编码
+            if (!/^\d{6}$/.test(postalCode)) {
+                document.getElementById('postalCodeError').textContent = '邮政编码必须是6位数字';
+                isValid = false;
+            }
+
+            // 如果验证通过，显示结果
+            if (isValid) {
+                const output = `
+                    <h2>提交结果:</h2>
+                    <p><strong>名称:</strong> ${name}</p>
+                    <p><strong>年龄:</strong> ${age}</p>
+                    <p><strong>性别:</strong> ${gender.value}</p>
+                    <p><strong>地址:</strong> ${address}</p>
+                    <p><strong>城市:</strong> ${city}</p>
+                    <p><strong>邮政编码:</strong> ${postalCode}</p>
+                    <p><strong>爱好:</strong> ${hobbies.join(', ') || '无'}</p>
+                `;
+                document.getElementById('output').innerHTML = output;
+            }
+        }
+    </script>
+</html>
