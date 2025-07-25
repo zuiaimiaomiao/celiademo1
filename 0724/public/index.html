@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Joke App
+    </title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+    <h1>
+            Joke as you may want
+        <!-- Button to call async get function from API-->
+    </h1>
+    <button id="getJokeButton" onclick = "getJoke()">Get Joke</button>
+    <p id="jokeDisplay"></p>
+    <hr>
+    <!-- whatever call from api is data -->
+    <script>
+        // make sure it is async
+       async function getJoke() {
+            const response = await fetch('/joke'); //call internal API instead of third party one
+            const data = await response.json(); //get the data in json format
+            let jokeText = '';
+
+            //only one value in data, so use "single"
+            if(data.type === "single") {
+                jokeText = data.joke;
+            } else if(data.type = "twopart") {
+                jokeText = data.setup + '<br>' + data.delivery;
+            }else {
+                jokeText = 'No joke found';
+            }
+            //joke display
+            document.getElementById('jokeDisplay').innerHTML = jokeText; //display the joke   
+       }
+    </script>
+</body>
+</html>

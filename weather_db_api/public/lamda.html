@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lambda Function</title>
+    </head>
+    <body>
+        <h2>Sum of array items using Lambda Function</h2>
+        <div id = "result"></div>
+        <div id = "bigNumber"></div>
+        <script>
+            const numArray = [10,20,30,40,50];
+            const sumArray = numArray.reduce((a,b)=>a+b,0);
+            document.getElementById('result').innerHTML=`Sum of total: ${sumArray}`;
+        </script>
+        <script>
+            const num1 = 15;
+            const num2 = 20;
+            const num3 = 25;
+            // const biggerNumber2 = (a,b,c)=> a > b & a>c ? a : b>a&b>c ? b:c;
+            const addNum = (a,b,c)=>a+b+c;
+            const mysum = addNum(num1,num2,num3);              
+            const blankFunction = ()=>a+b+c;
+            const biggerNumber2 = (a,b,c)=>a>(b>c?b:c)?a:(b>c?b:c);
+            const biggerNumber = (a,b)=> a > b ? a : b;
+            const result = biggerNumber(num1,num2);
+            document.getElementById('bigNumber').innerHTML=`Bigger Number: ${result}`;
+            // if(num1 > num2){
+            //     document.getElementById('BiggerNumber').innerHTML(`${num1}`);
+            // }else{
+            //     document.getElementById('BiggerNumber').innerHTML(`${num2}`);
+            // }
+        </script>
+    </body>
+</html>

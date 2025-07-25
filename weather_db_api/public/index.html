@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+<body>
+    <h1>Let's get the weather of the city!</h1>
+    <!-- Button to call the async get function from API-->
+    <!-- 增加输入城市的输入框 -->
+    <input type="text" id="cityInput" placeholder="Enter city name">
+     <button id="weatherButton" onclick="getWeather()">Get Weather</button>
+     <p id="weatherDisplay"></p>
+ 
+     <script>
+        async function getWeather(){
+            const city = document.getElementById('cityInput').value;
+            if(!city) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/weather?city=${encodeURIComponent(city)}`);
+                if(!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+
+                let activitytext = `Weather in ${data.city}, ${data.country}: ${data.temperature}°C (${data.description})`;
+                document.getElementById('weatherDisplay').innerHTML = activitytext;
+            } catch(error) {
+                console.error('Error:', error);
+                document.getElementById('weatherDisplay').innerHTML = 'Failed to get weather data';
+            }
+        }
+     </script>
+</body>
+</html>

@@ -1,7 +1,6 @@
 {
   "name": "node_pro",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
-  }
+    "express": "^5.1.0",
+    "mysql2": "^3.14.2",
+    "node-fetch": "^3.3.2"
+  },
+  "description": ""
 }

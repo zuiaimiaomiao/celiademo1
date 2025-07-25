@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Page</title>
+</head>
+<body>
+    <h1>Let's get some activity!</h1>
+    <!-- Button to call the async get function from API-->
+     <button id="activityButton" onclick="getActivity()">Get an Activity</button>
+     <p id="activityDisplay"></p>
+
+     <script>
+        async function getActivity(){
+            const response = await fetch('/Activity');
+            const data = await response.json();
+
+            let activitytext = '';
+            activitytext = data.activity;
+
+            document.getElementById('activityDisplay').innerHTML = activitytext;
+        }
+     </script>
+</body>
+</html>
