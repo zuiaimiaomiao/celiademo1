@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+<body>
+    <h1>Let's get the weather of the city!</h1>
+    <!-- Button to call the async get function from API-->
+     <button id="weatherButton" onclick="getWeather()">Get Weather</button>
+     <p id="weatherDisplay"></p>
+ 
+     <script>
+        async function getWeather(){
+            const response = await fetch('/weather');
+            const data = await response.json();
+
+            let activitytext = '';
+            activitytext = `${data.weather[0].main}`;
+
+            document.getElementById('weatherDisplay').innerHTML = activitytext;
+        }
+     </script>
+</body>
+</html>

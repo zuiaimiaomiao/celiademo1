@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie API</title>
+</head>
+<body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        color: #333;
+    }
+    form {
+        margin-bottom: 20px;
+        background: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #218838;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        background: #fff;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+</style>
+    <ul id="movielist"></ul>
+    <form id = "addMovieForm">
+        <label for="movietitle">Movietitle:</label>
+        <input type="text" id="movietitle" name="movietitle" required placeholder="Enter the Movietitle">
+        <label for="movieyear">Movieyear:</label>
+        <input type="text" id="movieyeare" name="movieyear" required placeholder="Enter the Movieyear">  
+        <button type="submit">Add Movie</button>
+    </form>
+    <script>
+        const userList = document.getElementById('movielist');
+        const userForm = document.getElementById('addMovieForm');
+        const userName = document.getElementById('movietitle');
+        const userYear = document.getElementById('movieyear');
+        // Fetch and display movies 
+        // function getALLMovies() {
+        //     fetch('/movies')
+        //         .then(response => response.json())
+        //         .then(movies => {
+        //             userList.innerHTML = '';
+        //             movies.forEach(movie => {
+        //                 const li = document.createElement('li');
+        //                 li.textContent = `${movie.title} (${movie.year})`;
+        //                 userList.appendChild(li);
+        //             });
+        //         })
+        //         .catch(error => console.error('Error fetching movies:', error));
+        // }   
+        // Add new movie    
+        userForm.addEventListener('submit', function (e) {
+            e.preventDefault();  //阻止表单默认提交行为,用我们自己设计的上传的方法
+            const title = userName.value;  //获取输入的电影标题
+            const year = userYear.value;  //获取输入的电影年份
+            if (!title || !year) return;  //如果没有输入电影标题或年份则返回
+            // Post the movie to the api
+            fetch('/movies', {  //movies：请求的目标 URL（后端接口地址），表示要把数据提交到这个接口。
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, year })  //将电影标题和年份转换为JSON格式
+            })
+            .then(res => res.json()) 
+            .then(() => {
+                userName.value = '';  //清空输入框
+                userYear.value = '';  //清空输入框
+                getALLMovies();  //重新获取电影列表
+            })//将响应转换为JSON格式
+        });
+        getALLMovies();
+
+        function createMovieItem(movie) {
+            const li = document.createElement('li');
+            li.textContent = `${movie.title} (${movie.year})`;
+
+            const updateButton = document.createElement('button');
+            updateButton.textContent = 'Update';
+            updateButton.onclick = () => updateMovie(movie.id);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => deleteMovie(movie.id);
+
+            li.appendChild(updateButton);
+            li.appendChild(deleteButton);
+            return li;
+        }
+
+        function updateMovie(id) {
+            const title = prompt("Enter new title:");
+            const year = prompt("Enter new year:");
+            if (title && year) {
+            fetch(`/movies/${id}`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, year })
+            })
+            .then(() => getALLMovies())
+            .catch(error => console.error('Error updating movie:', error));
+            }
+        }
+
+        function deleteMovie(id) {
+            if (confirm("Are you sure you want to delete this movie?")) {
+            fetch(`/movies/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => getALLMovies())
+            .catch(error => console.error('Error deleting movie:', error));
+            }
+        }
+
+        // Update the movie list rendering
+        function getALLMovies() {
+            fetch('/movies')
+            .then(response => response.json())
+            .then(movies => {
+                userList.innerHTML = '';
+                movies.forEach(movie => {
+                userList.appendChild(createMovieItem(movie));
+                });
+            })
+            .catch(error => console.error('Error fetching movies:', error));
+        }
+    </script>
+</body>
+</html>

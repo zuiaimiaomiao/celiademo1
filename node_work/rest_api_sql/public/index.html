@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Using MYSQL with API</title>
+        <script src="/app.js" defer></script>
+    </head>
+    <body>
+        <h1>Using Mysql</h1>
+        <hr>
+        <h2>Users</h2>
+        <ul id = "userList"></ul>
+        <hr>
+        <form id=""addUserForm>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <button type = "submit">Add User</button>
+            <button type="button" onclick="getAllUser()">Get All Users</button>
+        </form>
+        <script>
+            const userList = document.getElementById('userList');
+            const addUserForm = document.getElementById('addUserForm');
+            const nameInput = document.getElementById('name');     
+            //Function to fetch and display  users
+            function getAllUser(){ //本地可以省略http://localhost:3000
+                fetch('http://localhost:3000/users')
+                .then(response => response.json())
+                .then(data => {
+                    userList.innerHTML = ''; // Clear the list before adding new items
+                    data.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = user.name;
+                        userList.appendChild(li);
+                    });
+                })
+            }
+            getAllUser(); // Initial call to fetch and display users    
+            //Function to add a new user
+            addUserForm.addEventListener('submit',function(e){
+                e.preventDefault(); // Prevent the form from submitting the traditional way
+                const name = nameInput.value.trim(); //避免用户不小心输入的首尾空格对数据处理（如表单提交、判断等 ）产生干扰 
+                if (name) {
+                    fetch('http://localhost:3000/users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name })
+                    })
+                    .then(response => response.json())
+                    .then(user => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `${user.name}:${user.id} <button onclick="updateUser(${user.id}, '${user.name}')">Update</button> <button onclick="deleteUser(${user.id})">Delete</button>`; // Assuming the API returns the created user object
+                        li.textContent = user.name; // Assuming the API returns the created user object
+                        userList.appendChild(li); // Add the new user to the list
+
+                        console.log('User added:', user);
+                        // getAllUser(); // Refresh the user list
+                        nameInput.value = ''; // Clear the input field
+                    })
+                    .catch(error => console.error('Error adding user:', error));
+                }
+            });
+            //Function to update exsiting user
+            function updateUser(id,curname){
+                const newName = prompt("Enter new name for the user:", curname);
+                if(!newName) return;
+                fetch(`/users/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName })
+                }).then(()=>getAllUser());
+            }
+            //Function to delete a user
+            function deleteUser(userId){
+                // const userId= prompt("Enter the ID of the user to delete:");
+                if(!userId) return;
+                fetch(`/users/${userId}`, {
+                    method: 'DELETE'
+                }).then(() => getAllUser())
+                .catch(error => console.error('Error deleting user:', error));
+            }
+        </script>
+    </body> 
+</html> 
